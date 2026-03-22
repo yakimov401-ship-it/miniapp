@@ -1,12 +1,40 @@
-let player = {
-    resources: {
-        камень: 2,
-        дерево: 1,
-        трава: 1
-    },
-    items: []
-};
+let player = null;
+let user_id = null;
 
+const API_URL = "https://unquavering-revelational-marinda.ngrok-free.dev";
+
+// Получаем Telegram ID
+if (window.Telegram && Telegram.WebApp) {
+    user_id = Telegram.WebApp.initDataUnsafe.user.id;
+} else {
+    user_id = "test_user";
+}
+
+// ЗАГРУЗКА
+async function loadPlayer() {
+    const res = await fetch(API_URL + "/get_player", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ user_id })
+    });
+
+    player = await res.json();
+    updateUI();
+}
+
+// СОХРАНЕНИЕ
+async function savePlayer() {
+    await fetch(API_URL + "/save_player", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            user_id,
+            player
+        })
+    });
+}
+
+// UI
 function updateUI() {
     document.getElementById("resources").innerText =
         JSON.stringify(player.resources);
@@ -15,6 +43,7 @@ function updateUI() {
         player.items.join(", ");
 }
 
+// ИГРА
 function gather() {
     const resList = ["камень", "дерево", "трава"];
     const res = resList[Math.floor(Math.random() * resList.length)];
@@ -22,6 +51,7 @@ function gather() {
     player.resources[res] = (player.resources[res] || 0) + 1;
 
     alert("Ты нашёл: " + res);
+    savePlayer();
     updateUI();
 }
 
@@ -47,7 +77,9 @@ function craft(item) {
     player.items.push(item);
 
     alert("Создано: " + item);
+    savePlayer();
     updateUI();
 }
 
-updateUI();
+// ЗАПУСК
+loadPlayer();
