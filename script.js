@@ -27,15 +27,6 @@ async function loadPlayer() {
     updateUI();
 }
 
-// Мир
-async function loadWorld() {
-    const res = await fetch(API_URL + "/get_world");
-    const world = await res.json();
-
-    document.getElementById("world").innerText =
-        JSON.stringify(world["ресурсы"], null, 2);
-}
-
 // UI
 function updateUI() {
     document.getElementById("resources").innerText =
@@ -43,6 +34,12 @@ function updateUI() {
 
     document.getElementById("items").innerText =
         player.items.join(", ");
+
+    document.getElementById("zodiac").innerText =
+        player.zodiac;
+
+    document.getElementById("stone").innerText =
+        player.power_stone;
 }
 
 // Сбор
@@ -65,9 +62,7 @@ async function gather() {
     alert("Ты нашёл: " + data.resource);
 
     updateUI();
-    loadWorld();
 }
 
 // Запуск
 loadPlayer();
-loadWorld();
