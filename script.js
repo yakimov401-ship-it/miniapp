@@ -3,7 +3,7 @@ let user_id = null;
 
 const API_URL = "https://unquavering-revelational-marinda.ngrok-free.dev";
 
-// ✅ УНИКАЛЬНЫЙ ID
+// ID
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
     user_id = Telegram.WebApp.initDataUnsafe.user.id;
 } else {
@@ -15,7 +15,7 @@ if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
     }
 }
 
-// 🔄 ЗАГРУЗКА ИГРОКА
+// Игрок
 async function loadPlayer() {
     const res = await fetch(API_URL + "/get_player", {
         method: "POST",
@@ -27,48 +27,30 @@ async function loadPlayer() {
     updateUI();
 }
 
-// 💾 СОХРАНЕНИЕ
-async function savePlayer() {
-    await fetch(API_URL + "/save_player", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            user_id,
-            player
-        })
-    });
-}
-
-// 🌍 ПОЛУЧЕНИЕ МИРА
+// Мир
 async function loadWorld() {
     const res = await fetch(API_URL + "/get_world");
     const world = await res.json();
 
     document.getElementById("world").innerText =
-        JSON.stringify(world["ресурсы"]);
+        JSON.stringify(world["ресурсы"], null, 2);
 }
 
-// 🎨 UI
+// UI
 function updateUI() {
     document.getElementById("resources").innerText =
-        JSON.stringify(player.resources);
+        JSON.stringify(player.resources, null, 2);
 
     document.getElementById("items").innerText =
         player.items.join(", ");
 }
 
-// ⛏ СБОР (MMO)
+// Сбор
 async function gather() {
-    const resList = ["камень", "дерево", "трава"];
-    const res = resList[Math.floor(Math.random() * resList.length)];
-
     const response = await fetch(API_URL + "/gather", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            user_id,
-            resource: res
-        })
+        body: JSON.stringify({ user_id })
     });
 
     const data = await response.json();
@@ -80,40 +62,12 @@ async function gather() {
 
     player = data.player;
 
-    alert("Ты добыл: " + res);
+    alert("Ты нашёл: " + data.resource);
 
     updateUI();
     loadWorld();
 }
 
-// ⚒ КРАФТ
-function craft(item) {
-    const recipes = {
-        "нож": ["камень", "дерево"],
-        "факел": ["дерево", "трава"]
-    };
-
-    const recipe = recipes[item];
-
-    for (let r of recipe) {
-        if (!player.resources[r] || player.resources[r] < 1) {
-            alert("Не хватает ресурсов");
-            return;
-        }
-    }
-
-    for (let r of recipe) {
-        player.resources[r]--;
-    }
-
-    player.items.push(item);
-
-    alert("Создано: " + item);
-
-    savePlayer();
-    updateUI();
-}
-
-// 🚀 ЗАПУСК
+// Запуск
 loadPlayer();
 loadWorld();
