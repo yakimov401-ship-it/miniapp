@@ -15,7 +15,7 @@ if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
     }
 }
 
-// Игрок
+// 🔄 ЗАГРУЗКА
 async function loadPlayer() {
     const res = await fetch(API_URL + "/get_player", {
         method: "POST",
@@ -25,6 +25,30 @@ async function loadPlayer() {
 
     player = await res.json();
     updateUI();
+}
+
+// 💾 СОХРАНЕНИЕ
+async function savePlayer() {
+    await fetch(API_URL + "/save_player", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ user_id, player })
+    });
+}
+
+// 🔥 СБРОС ИГРЫ
+function resetGame() {
+    if (!confirm("Ты уверен? Всё обнулится")) return;
+
+    // удаляем локальный ID
+    localStorage.removeItem("user_id");
+
+    // генерируем новый
+    user_id = "user_" + Math.random().toString(36).substring(2);
+    localStorage.setItem("user_id", user_id);
+
+    // перезапуск
+    loadPlayer();
 }
 
 // UI
@@ -42,7 +66,7 @@ function updateUI() {
         player.power_stone;
 }
 
-// Сбор
+// ⛏ СБОР
 async function gather() {
     const response = await fetch(API_URL + "/gather", {
         method: "POST",
@@ -64,5 +88,5 @@ async function gather() {
     updateUI();
 }
 
-// Запуск
+// 🚀 СТАРТ
 loadPlayer();
