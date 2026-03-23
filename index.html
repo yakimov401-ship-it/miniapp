@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h1>🔮 Натальная карта</h1>
+<h1>🌍 ОБЩИНА</h1>
 
 <h2>Знак</h2>
 <div id="zodiac"></div>
@@ -17,10 +17,25 @@
 <h2>Ресурсы</h2>
 <div id="resources"></div>
 
+<h2>Предметы</h2>
+<div id="items"></div>
+
+<h2>Очередь крафта</h2>
+<div id="queue"></div>
+
 <br>
 
-<button onclick="setBirth()">🎂 Ввести дату рождения</button>
+<button onclick="setBirth()">🎂 Дата рождения</button>
 <button onclick="gather()">⛏ Собирать</button>
+
+<br><br>
+
+<h3>Крафт</h3>
+
+<button onclick="craft('нож')">🔪 Нож</button><br><br>
+<button onclick="craft('копье')">🪓 Копьё</button><br><br>
+<button onclick="craft('одежда')">👕 Одежда</button><br><br>
+<button onclick="craft('броня')">🛡 Броня</button>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="script.js"></script>
