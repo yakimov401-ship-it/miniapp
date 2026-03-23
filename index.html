@@ -8,34 +8,29 @@
 
 <h1>🌍 ОБЩИНА</h1>
 
-<div>
-    <h2>Знак</h2>
-    <div id="zodiac"></div>
-</div>
+<h2>Ресурсы</h2>
+<div id="resources"></div>
 
-<div>
-    <h2>Камень силы</h2>
-    <div id="stone"></div>
-</div>
+<h2>Предметы</h2>
+<div id="items"></div>
 
-<div>
-    <h2>Ресурсы</h2>
-    <div id="resources"></div>
-</div>
-
-<div>
-    <h2>Предметы</h2>
-    <div id="items"></div>
-</div>
+<h2>Очередь крафта</h2>
+<div id="queue"></div>
 
 <br>
 
+<!-- СБОР -->
 <button onclick="gather()">⛏ Собирать</button>
 
 <br><br>
 
-<!-- 🔥 ВОТ ОНА -->
-<button onclick="resetGame()">🔄 Начать заново</button>
+<!-- 🔥 КРАФТ (ВОТ ОНИ) -->
+<h3>Крафт</h3>
+
+<button onclick="craft('нож')">🔪 Нож (2 камня + 1 дерево)</button><br><br>
+<button onclick="craft('факел')">🔥 Факел (1 дерево + 2 трава)</button><br><br>
+<button onclick="craft('копье')">🪓 Копьё (3 дерево + 2 камень)</button><br><br>
+<button onclick="craft('амулет')">🔮 Амулет (особый)</button>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="script.js"></script>
