@@ -21,10 +21,27 @@ async function loadPlayer() {
     updateUI();
 }
 
-// установить дату рождения
+// UI
+function updateUI() {
+    document.getElementById("zodiac").innerText =
+        player.zodiac || "не выбран";
+
+    document.getElementById("bonus").innerText =
+        player.bonus ? player.bonus.text : "нет";
+
+    document.getElementById("resources").innerText =
+        JSON.stringify(player.resources, null, 2);
+}
+
+// 🔥 ВОТ НОРМАЛЬНЫЙ ВВОД ДАТЫ
 async function setBirth() {
-    const day = prompt("День рождения (1-31)");
-    const month = prompt("Месяц (january, february...)");
+    const day = prompt("Введи день (1-31)");
+    const month = prompt("Введи месяц (1-12)");
+
+    if (!day || !month) {
+        alert("Нужно ввести дату");
+        return;
+    }
 
     const res = await fetch(API_URL + "/set_birth", {
         method: "POST",
@@ -34,16 +51,50 @@ async function setBirth() {
 
     const data = await res.json();
 
+    if (data.error) {
+        alert("Ошибка");
+        return;
+    }
+
     player.zodiac = data.zodiac;
 
     alert("Твой знак: " + data.zodiac);
+
     updateUI();
 }
 
-// UI
-function updateUI() {
-    document.getElementById("zodiac").innerText =
-        player.zodiac || "не выбран";
+// 🔮 гороскоп
+async function getHoroscope() {
+    const res = await fetch(API_URL + "/get_horoscope", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ user_id })
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+        alert("Сначала введи дату рождения");
+        return;
+    }
+
+    alert(data.text);
+}
+
+// ⛏ сбор
+async function gather() {
+    const res = await fetch(API_URL + "/gather", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ user_id })
+    });
+
+    const data = await res.json();
+
+    alert(`Ты нашёл ${data.resource} x${data.amount}`);
+
+    player = data.player;
+    updateUI();
 }
 
 // старт
