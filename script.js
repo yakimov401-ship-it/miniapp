@@ -6,12 +6,7 @@ const API_URL = "https://unquavering-revelational-marinda.ngrok-free.dev";
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
     user_id = Telegram.WebApp.initDataUnsafe.user.id;
 } else {
-    user_id = localStorage.getItem("user_id");
-
-    if (!user_id) {
-        user_id = "user_" + Math.random().toString(36).substring(2);
-        localStorage.setItem("user_id", user_id);
-    }
+    user_id = "test_user";
 }
 
 // загрузка
@@ -26,60 +21,30 @@ async function loadPlayer() {
     updateUI();
 }
 
-// UI
-function updateUI() {
-    document.getElementById("resources").innerText =
-        JSON.stringify(player.resources, null, 2);
+// установить дату рождения
+async function setBirth() {
+    const day = prompt("День рождения (1-31)");
+    const month = prompt("Месяц (january, february...)");
 
-    document.getElementById("items").innerText =
-        player.items.join(", ");
-
-    document.getElementById("queue").innerText =
-        JSON.stringify(player.craft_queue, null, 2);
-}
-
-// сбор
-function gather() {
-    const list = ["камень", "дерево", "трава"];
-    const r = list[Math.floor(Math.random() * list.length)];
-
-    player.resources[r] = (player.resources[r] || 0) + 1;
-
-    alert("Ты добыл: " + r);
-    updateUI();
-}
-
-// крафт
-async function craft(item) {
-    const res = await fetch(API_URL + "/start_craft", {
+    const res = await fetch(API_URL + "/set_birth", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ user_id, item })
+        body: JSON.stringify({ user_id, day, month })
     });
 
     const data = await res.json();
 
-    if (data.error) {
-        alert(data.error);
-        return;
-    }
+    player.zodiac = data.zodiac;
 
-    player = data;
+    alert("Твой знак: " + data.zodiac);
     updateUI();
 }
 
-// обновление
-async function updateCraft() {
-    const res = await fetch(API_URL + "/update_craft", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ user_id })
-    });
-
-    player = await res.json();
-    updateUI();
+// UI
+function updateUI() {
+    document.getElementById("zodiac").innerText =
+        player.zodiac || "не выбран";
 }
 
-setInterval(updateCraft, 2000);
-
+// старт
 loadPlayer();
