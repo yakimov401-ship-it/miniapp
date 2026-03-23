@@ -9,7 +9,6 @@ if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
     user_id = "test_user";
 }
 
-// загрузка
 async function loadPlayer() {
     const res = await fetch(API_URL + "/get_player", {
         method: "POST",
@@ -21,27 +20,20 @@ async function loadPlayer() {
     updateUI();
 }
 
-// UI
 function updateUI() {
     document.getElementById("zodiac").innerText =
         player.zodiac || "не выбран";
 
-    document.getElementById("bonus").innerText =
-        player.bonus ? player.bonus.text : "нет";
+    document.getElementById("element").innerText =
+        player.element || "нет";
 
     document.getElementById("resources").innerText =
         JSON.stringify(player.resources, null, 2);
 }
 
-// 🔥 ВОТ НОРМАЛЬНЫЙ ВВОД ДАТЫ
 async function setBirth() {
-    const day = prompt("Введи день (1-31)");
-    const month = prompt("Введи месяц (1-12)");
-
-    if (!day || !month) {
-        alert("Нужно ввести дату");
-        return;
-    }
+    const day = prompt("День (1-31)");
+    const month = prompt("Месяц (1-12)");
 
     const res = await fetch(API_URL + "/set_birth", {
         method: "POST",
@@ -51,37 +43,14 @@ async function setBirth() {
 
     const data = await res.json();
 
-    if (data.error) {
-        alert("Ошибка");
-        return;
-    }
-
     player.zodiac = data.zodiac;
+    player.element = data.element;
 
-    alert("Твой знак: " + data.zodiac);
+    alert(`Знак: ${data.zodiac} | Стихия: ${data.element}`);
 
     updateUI();
 }
 
-// 🔮 гороскоп
-async function getHoroscope() {
-    const res = await fetch(API_URL + "/get_horoscope", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ user_id })
-    });
-
-    const data = await res.json();
-
-    if (data.error) {
-        alert("Сначала введи дату рождения");
-        return;
-    }
-
-    alert(data.text);
-}
-
-// ⛏ сбор
 async function gather() {
     const res = await fetch(API_URL + "/gather", {
         method: "POST",
@@ -97,5 +66,4 @@ async function gather() {
     updateUI();
 }
 
-// старт
 loadPlayer();
