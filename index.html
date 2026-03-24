@@ -1,44 +1,115 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Община</title>
+<meta charset="UTF-8">
+<title>Община RPG</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+}
+
+.container {
+    padding: 20px;
+    max-width: 700px;
+    margin: auto;
+}
+
+.card {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+button {
+    background: #3b82f6;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.inventory {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.slot {
+    background: #020617;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.count {
+    position: absolute;
+    bottom: 5px;
+    right: 8px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.log {
+    background: #020617;
+    padding: 10px;
+    border-radius: 8px;
+    height: 100px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+</style>
+
 </head>
 <body>
 
-<h1>🌍 ОБЩИНА</h1>
+<div class="container">
 
-<h2>Знак</h2>
-<div id="zodiac"></div>
+<h1>⚔ ОБЩИНА RPG</h1>
 
-<h2>Стихия</h2>
-<div id="element"></div>
+<div class="card">
+    Уровень: <span id="level"></span> |
+    XP: <span id="xp"></span> |
+    Очки: <span id="points"></span>
+</div>
 
-<h2>Ресурсы</h2>
-<div id="resources"></div>
+<div class="card">
+    🌙 Знак: <span id="zodiac"></span><br>
+    🌊 Стихия: <span id="element"></span><br>
+    <button onclick="setBirth()">🎂 Дата рождения</button>
+</div>
 
-<h2>Предметы</h2>
-<div id="items"></div>
+<div class="card">
+    <h3>🎒 Инвентарь</h3>
+    <div id="inventory" class="inventory"></div>
+</div>
 
-<h2>Очередь крафта</h2>
-<div id="queue"></div>
+<div class="card">
+    <button onclick="gather()">⛏ Собирать</button>
+</div>
 
-<br>
+<div class="card">
+    <h3>⚒ Крафт</h3>
+    <button onclick="craft('нож')">🔪</button>
+    <button onclick="craft('копье')">🪓</button>
+    <button onclick="craft('одежда')">👕</button>
+    <button onclick="craft('броня')">🛡</button>
+</div>
 
-<button onclick="setBirth()">🎂 Дата рождения</button>
-<button onclick="gather()">⛏ Собирать</button>
+<div class="card">
+    <h3>📜 Лог</h3>
+    <div id="log" class="log"></div>
+</div>
 
-<br><br>
+</div>
 
-<h3>Крафт</h3>
-
-<button onclick="craft('нож')">🔪 Нож</button><br><br>
-<button onclick="craft('копье')">🪓 Копьё</button><br><br>
-<button onclick="craft('одежда')">👕 Одежда</button><br><br>
-<button onclick="craft('броня')">🛡 Броня</button>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="script.js"></script>
-
 </body>
 </html>
